@@ -9,12 +9,10 @@ if (File.Exists("EstanteDeLivros.txt"))
     bookcase = ReadFile("EstanteDeLivros.txt");
 }
 
-
 if (File.Exists("LivrosEmprestados.txt"))
 {
     lendBook = ReadFile("LivrosEmprestados.txt");
 }
-
 
 if (File.Exists("LivrosSendoLidos.txt"))
 {
@@ -98,6 +96,12 @@ do
             break;
 
         case 10:
+            bookcase.Add(EditBook(FindBook(bookcase)));
+            WriteFile(bookcase, "EstanteDeLivros.txt");
+            Console.Clear();
+            break;
+
+        case 11:
             System.Environment.Exit(0);
             break;
 
@@ -115,7 +119,25 @@ do
 
 
 
+
 //==========================================================================================================================================
+Book EditBook(Book book)
+{
+    Console.WriteLine("Digite a descrição do livro: ");
+    book.Description = Console.ReadLine();
+    Console.WriteLine("Digite a editora do livro: ");
+    book.Publisher = Console.ReadLine();
+    EditAuthor(book.Author);
+    return book;
+}
+
+void EditAuthor(Author author)
+{
+    Console.WriteLine("Digite a descrição do autor: ");
+    author.About = Console.ReadLine();
+    Console.WriteLine("Digite o rodapé do livro: ");
+    author.Footer = Console.ReadLine();
+}
 
 void WriteFile(List<Book> bookcase, string archiveName)
 {
@@ -147,13 +169,13 @@ List<Book> ReadFile(string archiveName)
     try
     {
         string line;
-        string[] aux = new string[6];
+        string[] aux = new string[9];
         while ((line = sr.ReadLine()) != null)
         {
             aux = line.Split("|");
 
-            Book book = new(aux[0], aux[1], aux[2], aux[5]);
-            Author author = new(aux[3], int.Parse(aux[4]));
+            Book book = new(int.Parse(aux[0]), aux[1], aux[2], aux[3], aux[8]);
+            Author author = new(aux[4], int.Parse(aux[5]), aux[6], aux[7]);
 
             book.Author = author;
             bookcase.Add(book);
@@ -175,11 +197,11 @@ List<Book> ReadFile(string archiveName)
 
 Book FindBook(List<Book> bookcase)
 {
-    Console.WriteLine("Digite o título do livro: ");
-    var title = Console.ReadLine();
+    Console.WriteLine("Digite o ID do livro: ");
+    var id = IsInt();
     foreach (var item in bookcase)
     {
-        if (item.Title.Trim() == (title))
+        if (item.Id == (id))
         {
             return item;
         }
@@ -200,7 +222,7 @@ int Menu()
     Console.Clear();
     Console.WriteLine(">>>Menu de opções<<<\n\n1 - Adiciona Livro\n2 - Retirar livro para ler\n" +
         "3 - Emprestar Livro\n4 - Mostrar estante\n5 - Mostrar emprestados\n6 - Mostrar livros na fila" +
-        " de leitura\n7 - Remover livro\n8 - Devolver livro emprestado\n9 - Livro terminado\n10 - Sair" +
+        " de leitura\n7 - Remover livro\n8 - Devolver livro emprestado\n9 - Livro terminado\n10 - Editar livro\n11 - Sair\n\n" +
         "Escolha uma opção: ");
 
     var aux = int.Parse(Console.ReadLine());
@@ -211,13 +233,16 @@ int Menu()
 
 Book CreateBook()
 {
+    Console.WriteLine("Digite o ID do livro: ");
+    int id = IsInt();
+
     Console.WriteLine("Digite o título do livro: ");
     string title = Console.ReadLine();
 
     Console.WriteLine("Digite o ISNB do livro: ");
     string isnb = Console.ReadLine();
 
-    Book book = new(title, isnb);
+    Book book = new(id, title, isnb);
 
     Console.WriteLine("Quantos autores tem o livro? ");
 

@@ -15,12 +15,19 @@ namespace PersonalBookcase
         public Author Author { get; set; }
         public string? Publisher { get; set; }
 
-        public Book(string? title, string? isbn)
+        public Book(int id, string? title, string? isbn)
         {
+            this.Id = id;
             this.Title = title;
             this.ISBN = isbn;
             this.Description = string.Empty;
             this.Publisher = string.Empty;
+        }
+
+        public Book(int id, string? title, string? iSBN, string? description, string? publisher) : this(id, title, iSBN)
+        {
+            Description = description;
+            Publisher = publisher;
         }
 
         public void AddAuthor(Author author)
@@ -30,15 +37,9 @@ namespace PersonalBookcase
             this.Author = author;
         }
 
-        public Book(string title, string iSBN, string description, string publisher) : this(title, iSBN)
-        {
-            Description = description;
-            Publisher = publisher;
-        }
-
         public override string ToString()
         {
-            return $"{this.Title} | {this.Description} | {this.ISBN} | {this.Author.Name} | {this.Author.BirthYear} | {this.Publisher}";
+            return $"{this.Id} | {this.Title} | {this.Description} | {this.ISBN} | {this.Author.ToString()} | {this.Publisher}";
         }
     }
 }

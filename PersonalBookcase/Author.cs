@@ -14,5 +14,16 @@ namespace PersonalBookcase
         public Author(string name, int year) : base(name, year)
         {
         }
+
+        public Author(string name, int year, string about, string footer) : base(name, year)
+        {
+            About = about;
+            Footer = footer;
+        }
+
+        public override string ToString()
+        {
+            return $"{this.Name} | {this.BirthYear} |{this.About} | {this.Footer}";
+        }
     }
 }
